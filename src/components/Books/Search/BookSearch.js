@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useSearchBooksMutation, setBookTitle } from '../../../store';
 import "./BookSearch.css";
@@ -23,12 +23,6 @@ const BookSearch = () => {
         }
     }
 
-    useEffect(() => {
-        if(results?.data?.items) {
-            dispatch(setBookTitle({searchResults: results?.data?.items}))
-        }
-    }, [results, dispatch]);
-
     const renderedResults = (searchResults.length > 0) ? searchResults.map((book) => (
         <ListOfBooks book={book} key={book.id}></ListOfBooks>
     )) : '';
@@ -42,7 +36,7 @@ const BookSearch = () => {
                     <input className="input w-full mt-1 rounded-lg border border-slate-400 px-2 text-slate-900 placeholder-slate-400 transition-colors duration-300 focus:border-sky-400 focus:outline-none"
                         placeholder="Book Title (Required)"
                         value={bookTitle}
-                        onChange={(event)=>dispatch(setBookTitle({bookTitle: event.target.value}))}
+                        onChange={(event)=>dispatch(setBookTitle({bookTitle: event.target.value, searchResults: []}))}
                     />
                     <input className="input w-full mt-3 rounded-lg border border-slate-400 px-2 text-slate-900 placeholder-slate-400 transition-colors duration-300 focus:border-sky-400 focus:outline-none"
                         placeholder="Author(optional)"
