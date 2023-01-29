@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuthChangeMutation } from '../../store';
 
-import { useLocation, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FcGoogle } from 'react-icons/fc';
 import { useSelector } from 'react-redux';
 import { authDataInfo } from '../../store';
