@@ -23,7 +23,7 @@ const BookSearch = () => {
 
     return (
         <>
-        <div className="form container">
+        <div className="form container w-2/3">
             <div>
                 <h2 className="text-2xl mt-3 text-center font-bold">Find Books</h2>
                 <form className="text-2xl text-center font-bold" onSubmit={fetchBooks}>
@@ -37,7 +37,7 @@ const BookSearch = () => {
                         value={author}
                         onChange={(e) => setAuthor(e.target.value)}
                     />
-                    <Button className="mt-2 float-right text-black bg-blue-500" type="submit" loading={results.isLoading}>
+                    <Button className="mt-2 float-right text-black bg-blue-300" type="submit" loading={results.isLoading}>
                         Submit
                     </Button>
                 </form>
@@ -46,7 +46,7 @@ const BookSearch = () => {
         {results.isError ?
             <div className="text-center mt-28 text-red-600 font-extrabold text-2xl">Error fetching data... "{results.error.data.error.message}"</div>
         :''}
-        <div className="mt-28">{renderedResults}</div>
+        <div className="mt-28 container w-2/3">{renderedResults}</div>
         </>
     )
 }
