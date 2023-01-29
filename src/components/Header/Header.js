@@ -21,7 +21,7 @@ const Header = () => {
     return (
         <nav className="py-6 px-10 w-full bg-black">
             <div className="flex justify-between items-center container mx-auto bg-black">
-                <div><h1 className="text-xl text-zinc-50 font-bold"><Link to="/">1Stop</Link></h1></div>
+                <div><h1 className="text-xl text-zinc-50 font-bold"><Link to="/">Books</Link></h1></div>
                 <>{showError ? <div><h1 className="text-xl text-red-600 font-bold ml-5 mr-5">Signin Failure: {errorMessage}, Try again</h1></div> : ''}</>
                 <>{signedIn ? <div><h1 className="text-center text-xl text-zinc-50 font-bold">Hello {userName}</h1></div> : ''}</>
                 <button onClick={()=>authChange({authChange,authDataInfo})} className="text-xl text-zinc-50 font-bold">
