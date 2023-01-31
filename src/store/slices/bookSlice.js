@@ -1,10 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { booksApi } from '../apis/booksApi';
 
 const initialState = {
   bookTitle: '',
   author: '',
-  searchResults: []
+  showList: false,
 };
 const bookSlice = createSlice({
   name: 'book',
@@ -13,16 +12,7 @@ const bookSlice = createSlice({
     setBookTitle(state, action) {
       return { ...state, ...action.payload};
     }
-  },
-  extraReducers: (builder) => {
-    builder.addMatcher(
-      booksApi.endpoints.searchBooks.matchFulfilled,
-      (state, { payload }) => {
-        state.searchResults = payload.items;
-      }
-    )
-  },
-
+  }
 });
 
 export const { setBookTitle } = bookSlice.actions;

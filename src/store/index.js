@@ -32,7 +32,7 @@ export {
     useAuthChangeMutation,
 } from './apis/authApi';
 export {
-  useSearchBooksMutation,
+  useSearchBooksQuery,
 } from './apis/booksApi';
 export {
   useFetchUserQuery,

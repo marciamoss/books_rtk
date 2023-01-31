@@ -4,19 +4,19 @@ const keys = require("../../keys.js");
 const booksApi = createApi({
     reducerPath: 'books',
     baseQuery: fetchBaseQuery({
-      baseUrl: keys.mongo.api,
+      baseUrl: keys.book.url,
       fetchFn: async (...args) => {
         return fetch(...args);
       },
     }),
     endpoints(builder) {
         return {
-            searchBooks: builder.mutation({
+            searchBooks: builder.query({
                 query: ({bookTitle, author}) => {
+                  const bookNAuthor= author ? (bookTitle).split(" ").join("+")+(author).split(" ").join("+") : bookTitle;
                   return {
-                    url: '/api/books/search',
-                    body: {bookTitle, author},
-                    method: 'POST',
+                    url: `${bookNAuthor}&key=${keys.book.apiKey}&startIndex=0&maxResults=40`,
+                    method: 'GET',
                   };
                 },
             }),
@@ -25,6 +25,6 @@ const booksApi = createApi({
 });
 
 export const {
-  useSearchBooksMutation,
+  useSearchBooksQuery,
 } = booksApi;
 export { booksApi };

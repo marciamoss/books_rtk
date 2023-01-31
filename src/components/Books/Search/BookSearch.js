@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { useSearchBooksMutation, setBookTitle, useFetchUserQuery } from '../../../store';
+import { setBookTitle, useFetchUserQuery } from '../../../store';
 import { useAddUser } from '../../../hooks';
 import "./BookSearch.css";
 import ListOfBooks from "../List/ListOfBooks";
@@ -10,25 +10,20 @@ const BookSearch = ({authUserId}) => {
     const dispatch = useDispatch();
     useFetchUserQuery(authUserId);
     useAddUser();
-    const [searchBooks, results] = useSearchBooksMutation();
-    const {bookTitle, author, searchResults} = useSelector((state) => {
+    const {bookTitle, author, showList} = useSelector((state) => {
         return {
             bookTitle: state.book.bookTitle,
             author: state.book.author,
-            searchResults: state.book.searchResults,
+            showList: state.book.showList,
         };
     });
 
     const fetchBooks = (event) => {
         event.preventDefault();
         if(bookTitle) {
-            searchBooks({bookTitle, author});
+            dispatch(setBookTitle({showList: true}));
         }
     }
-
-    const renderedResults = (searchResults.length > 0) ? searchResults.map((book) => (
-        <ListOfBooks book={book} key={book.id}></ListOfBooks>
-    )) : '';
 
     return (
         <>
@@ -39,23 +34,20 @@ const BookSearch = ({authUserId}) => {
                     <input className="input w-full mt-1 rounded-lg border border-slate-400 px-2 text-slate-900 placeholder-slate-400 transition-colors duration-300 focus:border-sky-400 focus:outline-none"
                         placeholder="Book Title (Required)"
                         value={bookTitle}
-                        onChange={(event)=>dispatch(setBookTitle({bookTitle: event.target.value, searchResults: []}))}
+                        onChange={(event)=>dispatch(setBookTitle({bookTitle: event.target.value, showList: false}))}
                     />
                     <input className="input w-full mt-3 rounded-lg border border-slate-400 px-2 text-slate-900 placeholder-slate-400 transition-colors duration-300 focus:border-sky-400 focus:outline-none"
                         placeholder="Author(optional)"
                         value={author}
-                        onChange={(event) => dispatch(setBookTitle({author: event.target.value}))}
+                        onChange={(event) => dispatch(setBookTitle({author: event.target.value, showList: false}))}
                     />
-                    <Button className="mt-2 float-right text-black bg-blue-300" type="submit" loading={results.isLoading}>
+                    <Button className="mt-2 float-right text-black bg-blue-300" type="submit">
                         Submit
                     </Button>
                 </form>
             </div>
         </div>
-        {results.isError ?
-            <div className="text-center mt-28 text-red-600 font-extrabold text-2xl">Error fetching data... "{results.error.data.error.message}"</div>
-        :''}
-        <div className="mt-28 container w-1/2">{renderedResults}</div>
+            {(showList) ? <ListOfBooks bookTitle={bookTitle} author={author}/> : ''}
         </>
     )
 }
