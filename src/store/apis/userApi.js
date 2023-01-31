@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+const keys = require("../../keys.js");
 
 const userApi = createApi({
   reducerPath: 'user',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:9000',
+    baseUrl: keys.mongo.api,
     fetchFn: async (...args) => {
       return fetch(...args);
     },
