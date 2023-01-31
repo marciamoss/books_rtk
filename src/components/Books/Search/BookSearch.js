@@ -10,11 +10,12 @@ const BookSearch = ({authUserId}) => {
     const dispatch = useDispatch();
     useFetchUserQuery(authUserId);
     useAddUser();
-    const {bookTitle, author, showList} = useSelector((state) => {
+    const {bookTitle, author, showList, listFetching} = useSelector((state) => {
         return {
             bookTitle: state.book.bookTitle,
             author: state.book.author,
             showList: state.book.showList,
+            listFetching: state.book.listFetching
         };
     });
 
@@ -41,7 +42,7 @@ const BookSearch = ({authUserId}) => {
                         value={author}
                         onChange={(event) => dispatch(setBookTitle({author: event.target.value, showList: false}))}
                     />
-                    <Button className="mt-2 float-right text-black bg-blue-300" type="submit">
+                    <Button className="mt-2 float-right text-black bg-blue-300" type="submit" loading={listFetching}>
                         Submit
                     </Button>
                 </form>
