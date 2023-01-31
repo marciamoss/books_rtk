@@ -10,14 +10,16 @@ import { authDataInfo } from '../../store';
 
 const Header = () => {
     const [authChange] = useAuthChangeMutation();
+
     const {signedIn, userName, showError, errorMessage} = useSelector((state) => {
         return {
             signedIn: state.authData.signedIn,
             userName: state.authData.userName,
             showError: state.authData.showError,
-            errorMessage: state.authData.errorMessage
+            errorMessage: state.authData.errorMessage,
         };
     });
+
     return (
         <nav className="py-6 px-10 w-full bg-black">
             <div className="flex justify-between items-center container mx-auto bg-black">

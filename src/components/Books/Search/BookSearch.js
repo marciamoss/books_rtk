@@ -1,12 +1,15 @@
 import React from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { useSearchBooksMutation, setBookTitle } from '../../../store';
+import { useSearchBooksMutation, setBookTitle, useFetchUserQuery } from '../../../store';
+import { useAddUser } from '../../../hooks';
 import "./BookSearch.css";
 import ListOfBooks from "../List/ListOfBooks";
 import Button from "../../Button";
 
-const BookSearch = () => {
+const BookSearch = ({authUserId}) => {
     const dispatch = useDispatch();
+    useFetchUserQuery(authUserId);
+    useAddUser();
     const [searchBooks, results] = useSearchBooksMutation();
     const {bookTitle, author, searchResults} = useSelector((state) => {
         return {
