@@ -5,10 +5,7 @@ const keys = require("../../keys.js");
 const authApi = createApi({
     reducerPath: 'auth',
     baseQuery: fetchBaseQuery({
-    baseUrl: '/',
-    fetchFn: async (...args) => {
-        return fetch(...args);
-    },
+    baseUrl: '/'
     }),
     endpoints: (builder) => ({
         authChange: builder.mutation({
