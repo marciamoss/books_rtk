@@ -7,9 +7,10 @@ import ExpandablePanel from '../../ExpandablePanel';
 import { GiBookCover } from 'react-icons/gi';
 import Skeleton from '../../Skeleton';
 
-const ListOfBooks = ({bookTitle, author, authUserId}) => {
-    const [userInDb, setUserInDb] = useState(false);
+const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
     const [saveNa, setSaveNa] = useState('');
+    const [saveButton, setSaveButton] = useState('');
+    const [saveButtonCn, setSaveButtonCn] = useState('');
     const {data, error, isFetching} = useSearchBooksQuery({bookTitle, author});
 
     const { refetch } = useFetchUserQuery(authUserId);
@@ -22,19 +23,25 @@ const ListOfBooks = ({bookTitle, author, authUserId}) => {
 
     useEffect(() => {
         const checkUser  = async () => {
-            const inDb =  (await refetch(authUserId).unwrap());
-            if(inDb.length>0) {
-                setUserInDb(true)
-            }else {
-                setSaveNa("**Save functionality not available for this login at this time**")
-            }
+            try{
+                const inDb =  (await refetch(authUserId).unwrap());
+                if(inDb.length>0 || userAdded) {
+                    setSaveNa('');
+                    setSaveButtonCn('float-left mr-3');
+                    setSaveButton(<Button className="font-bold text-black border-0 mt-3 mb-2 bg-blue-200">Save</Button>);
+                }else {
+                    setSaveNa("**Save functionality not available for this login at this time**")
+                }
+            } catch (error) {setSaveNa("**Save functionality not available for this login at this time**")};
         };
         if (signedIn) {
             checkUser();
         } else {
-            setSaveNa("")
+            setSaveNa("");
+            setSaveButton("");
+            setSaveButtonCn('mb-2');
         }
-    },[signedIn, refetch, authUserId])
+    },[signedIn, refetch, authUserId, userAdded])
 
     let content;
     if (isFetching) {
@@ -52,12 +59,10 @@ const ListOfBooks = ({bookTitle, author, authUserId}) => {
                         <div className="w-4/5 mb-3">
                             <span className="text-lg font-bold">
                                 <h1 className="font-bold text-xl underline">{bookObject.title} {bookObject.authors}</h1>
-                                    <Button className={`${signedIn && userInDb ? 'float-left mr-3' : 'mb-2'} mt-3 font-bold text-black border-0 bg-gray-300`}>
+                                    <Button className={`${saveButtonCn} mt-3 font-bold text-black border-0 bg-gray-300`}>
                                         <a href={bookObject.booklink} target="_blank" rel="noreferrer">Buy</a>
                                     </Button>
-                                    {signedIn && userInDb ?
-                                        <Button className="font-bold text-black border-0 mt-3 mb-2 bg-blue-200">Save</Button>
-                                        : ''}
+                                    {saveButton}
                                     <ExpandablePanel header={<div className="font-bold">Synopsis</div>}>
                                         {bookObject.synopsis ? <p>{bookObject.synopsis}</p> : 'Not Available'}
                                     </ExpandablePanel>

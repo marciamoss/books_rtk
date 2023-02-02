@@ -4,6 +4,7 @@ import { authDataInfo } from './authDataSlice';
 
 const initialState = {
   newUser: false,
+  userAdded: false
 }
 const userDataSlice = createSlice({
   name: 'userData',
@@ -26,6 +27,7 @@ const userDataSlice = createSlice({
         userApi.endpoints.addUser.matchFulfilled,
         (state, { payload, meta }) => {
             state.newUser = false;
+            state.userAdded = true;
         }
     );
   },

@@ -5,7 +5,7 @@ import "./BookSearch.css";
 import ListOfBooks from "../List/ListOfBooks";
 import Button from "../../Button";
 
-const BookSearch = ({authUserId}) => {
+const BookSearch = ({authUserId, userAdded}) => {
     const dispatch = useDispatch();
     const {bookTitle, author, showList, listFetching} = useSelector((state) => {
         return {
@@ -45,7 +45,7 @@ const BookSearch = ({authUserId}) => {
                 </form>
             </div>
         </div>
-            {(showList) ? <ListOfBooks bookTitle={bookTitle} author={author} authUserId={authUserId}/> : ''}
+            {(showList) ? <ListOfBooks bookTitle={bookTitle} author={author} authUserId={authUserId} userAdded={userAdded}/> : ''}
         </>
     )
 }

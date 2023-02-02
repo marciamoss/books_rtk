@@ -7,9 +7,10 @@ import BookSearch from "./components/Books/Search/BookSearch";
 import { useAddUser } from './hooks';
 
 const App = () => {
-    const {authUserId} = useSelector((state) => {
+    const {authUserId, userAdded} = useSelector((state) => {
         return {
-            authUserId: state.authData.authUserId
+            authUserId: state.authData.authUserId,
+            userAdded: state.userData.userAdded
         };
     });
     useFetchUserQuery(authUserId);
@@ -19,7 +20,7 @@ const App = () => {
         <Router>
             <Header/>
             <Routes>
-                <Route path="/" element={<BookSearch authUserId={authUserId}/>} />
+                <Route path="/" element={<BookSearch authUserId={authUserId} userAdded={userAdded}/>} />
             </Routes>
         </Router>
     );
