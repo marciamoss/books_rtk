@@ -8,7 +8,6 @@ import { GiBookCover } from 'react-icons/gi';
 import Skeleton from '../../Skeleton';
 
 const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
-    const [saveNa, setSaveNa] = useState('');
     const [saveButton, setSaveButton] = useState('');
     const [saveButtonCn, setSaveButtonCn] = useState('');
     const {data, error, isFetching} = useSearchBooksQuery({bookTitle, author});
@@ -26,19 +25,15 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
             try{
                 const inDb =  (await refetch(authUserId).unwrap());
                 if(inDb.length>0 || userAdded) {
-                    setSaveNa('');
                     setSaveButtonCn('float-left mr-3');
                     setSaveButton(<Button className="font-bold text-black border-0 mt-3 mb-2 bg-blue-200">Save</Button>);
-                }else {
-                    setSaveNa("**Save functionality not available for this login at this time**")
                 }
-            } catch (error) {setSaveNa("**Save functionality not available for this login at this time**")};
+            } catch (error) {setSaveButton('');setSaveButtonCn('mb-2');};
         };
         if (signedIn) {
             checkUser();
         } else {
-            setSaveNa("");
-            setSaveButton("");
+            setSaveButton('');
             setSaveButtonCn('mb-2');
         }
     },[signedIn, refetch, authUserId, userAdded])
@@ -77,7 +72,6 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
         :   !(data?.items) ? <div className="text-center mt-28 text-red-800 font-extrabold text-2xl">No books found for this title</div> : '';
     }
     return <div className="mt-20">
-        {saveNa ? <div className="container italic underline text-center text-red-800 text-xl font-bold w-1/2 mb-10">{saveNa}</div> : ''}
         {content}
     </div>
 };
