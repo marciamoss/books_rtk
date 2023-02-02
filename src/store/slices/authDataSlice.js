@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { userApi } from '../apis/userApi';
 
 const initialState = {
   signedIn: false,

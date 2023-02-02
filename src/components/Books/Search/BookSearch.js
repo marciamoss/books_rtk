@@ -1,15 +1,12 @@
 import React from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { setBookTitle, useFetchUserQuery } from '../../../store';
-import { useAddUser } from '../../../hooks';
+import { setBookTitle } from '../../../store';
 import "./BookSearch.css";
 import ListOfBooks from "../List/ListOfBooks";
 import Button from "../../Button";
 
 const BookSearch = ({authUserId}) => {
     const dispatch = useDispatch();
-    useFetchUserQuery(authUserId);
-    useAddUser();
     const {bookTitle, author, showList, listFetching} = useSelector((state) => {
         return {
             bookTitle: state.book.bookTitle,
@@ -48,7 +45,7 @@ const BookSearch = ({authUserId}) => {
                 </form>
             </div>
         </div>
-            {(showList) ? <ListOfBooks bookTitle={bookTitle} author={author}/> : ''}
+            {(showList) ? <ListOfBooks bookTitle={bookTitle} author={author} authUserId={authUserId}/> : ''}
         </>
     )
 }

@@ -4,7 +4,7 @@ const keys = require("../../keys.js");
 const booksApi = createApi({
     reducerPath: 'books',
     baseQuery: fetchBaseQuery({
-      baseUrl: keys.book.url,
+      baseUrl: keys.mongo.api,
       fetchFn: async (...args) => {
         return fetch(...args);
       },
@@ -15,7 +15,7 @@ const booksApi = createApi({
                 query: ({bookTitle, author}) => {
                   const bookNAuthor= author ? (bookTitle).split(" ").join("+")+(author).split(" ").join("+") : bookTitle;
                   return {
-                    url: `${bookNAuthor}&key=${keys.book.apiKey}&startIndex=0&maxResults=40`,
+                    url: `${keys.book.url}${bookNAuthor}&key=${keys.book.apiKey}&startIndex=0&maxResults=40`,
                     method: 'GET',
                   };
                 },
