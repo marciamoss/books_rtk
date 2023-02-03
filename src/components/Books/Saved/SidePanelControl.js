@@ -9,7 +9,7 @@ const SidePanelControl = () => {
     const dispatch = useDispatch();
     return (
         <div className="flex w-30 mr-5 flex-col space-y-2 border-gray-200 p-2">
-            <button className="max-[640px]:text-sm text-green-800 font-bold text-2xl " onClick={()=>dispatch(setBookSliceData({sliderOpen:true}))}>
+            <button className="max-[640px]:text-sm text-green-800 font-bold text-lg " onClick={()=>dispatch(setBookSliceData({sliderOpen:true}))}>
                 <MovingComponent
                     type="effect3D"
                     duration="1000ms"

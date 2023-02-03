@@ -26,7 +26,7 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
                         </div>
                         <div className="w-4/5 mb-3">
                             <span className="max-[640px]:text-sm text-lg font-bold">
-                                <h1 className="font-bold max-[640px]:text-sm text-xl text-left underline">{bookObject.title} {bookObject.authors}</h1>
+                                <h1 className="font-bold max-[640px]:text-sm text-lg text-left underline">{bookObject.title} {bookObject.authors}</h1>
                                     <Button className={`${saveButtonCn} mt-3 font-bold text-black border-0 bg-gray-300`}>
                                         <a href={bookObject.booklink} target="_blank" rel="noreferrer">Buy</a>
                                     </Button>
