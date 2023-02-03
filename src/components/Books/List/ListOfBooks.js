@@ -8,7 +8,7 @@ import { GiBookCover } from 'react-icons/gi';
 import Skeleton from '../../Skeleton';
 
 const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
-    const {saveButton, saveButtonCn} = useCheckUser(authUserId, userAdded);
+    const {userInDb} = useCheckUser(authUserId, userAdded);
     const {data, error, isFetching} = useSearchBooksQuery({bookTitle, author});
 
     let content;
@@ -27,10 +27,10 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
                         <div className="w-4/5 mb-3">
                             <span className="max-[640px]:text-sm text-lg font-bold">
                                 <h1 className="font-bold max-[640px]:text-sm text-lg text-left underline">{bookObject.title} {bookObject.authors}</h1>
-                                    <Button className={`${saveButtonCn} mt-3 font-bold text-black border-0 bg-gray-300`}>
+                                    <Button className={`${userInDb ? 'float-left mr-3' : 'mb-2'} mt-3 font-bold text-black border-0 bg-gray-300`}>
                                         <a href={bookObject.booklink} target="_blank" rel="noreferrer">Buy</a>
                                     </Button>
-                                    {saveButton}
+                                    {userInDb ? <Button className="font-bold text-black border-0 mt-3 mb-2 bg-blue-200">Save</Button> : ''}
                                     <ExpandablePanel header={<div className="font-bold">Synopsis</div>}>
                                         {bookObject.synopsis ? <p>{bookObject.synopsis}</p> : 'Not Available'}
                                     </ExpandablePanel>

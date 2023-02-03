@@ -1,41 +1,29 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useFetchUserQuery } from '../store';
-import Button from "../components/Button";
 
 function useCheckUser(authUserId, userAdded) {
     const { refetch } = useFetchUserQuery(authUserId);
-    const [saveButton, setSaveButton] = useState('');
-    const [saveButtonCn, setSaveButtonCn] = useState('');
     const [userInDb, setUserInDb] = useState(false);
 
-    const {signedIn} = useSelector((state) => {
-        return {
-            signedIn: state.authData.signedIn
-        };
-    });
     useEffect(() => {
         const checkUser  = async () => {
             try{
                 const inDb =  (await refetch(authUserId).unwrap());
-                if(inDb.length>0 || userAdded) {
-                    setUserInDb(inDb.length>0);
-                    setSaveButtonCn('float-left mr-3');
-                    setSaveButton(<Button className="font-bold text-black border-0 mt-3 mb-2 bg-blue-200">Save</Button>);
+                if(authUserId && (inDb.length>0 || userAdded)) {
+                    setUserInDb(true);
+                } else {
+                    setUserInDb(false);
                 }
-            } catch (error) {setSaveButton('');setSaveButtonCn('mb-2');};
+            } catch (error) {setUserInDb(false)};
         };
-        if (signedIn) {
+        if (authUserId) {
             checkUser();
         } else {
-            setSaveButton('');
-            setSaveButtonCn('mb-2');
+            setUserInDb(false);
         }
-    },[signedIn, refetch, authUserId, userAdded])
+    },[refetch, authUserId, userAdded])
 
     return {
-        saveButton,
-        saveButtonCn,
         userInDb
     }
 }
