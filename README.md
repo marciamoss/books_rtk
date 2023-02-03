@@ -2,4 +2,4 @@ Books_RTK
 
 **Deployed App Link** https://books-rtk.vercel.app
 
-react app built with redux-toolkit-query
+React app built with Redux-Toolkit-Query & Tailwind css

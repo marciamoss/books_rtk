@@ -13,12 +13,12 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
 
     let content;
     if (isFetching) {
-        content = <Skeleton className="h-10 w-1/2 container" times={10} />;
+        content = <Skeleton className="h-10 w-full container" times={10} />;
     } else {
         content = (data?.items?.length > 0) ? data?.items?.map((book) => {
             const bookObject = createBookObject(book);
             return (
-                <div className="container w-1/2" key={bookObject.id}>
+                <div className="container w-full" key={bookObject.id}>
                     <div className="flex">
                         <div className="w-1/10 mb-3">
                             {!bookObject.bookimg ? <GiBookCover className="w-20 h-fit mr-5"/>
@@ -26,7 +26,7 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
                         </div>
                         <div className="w-4/5 mb-3">
                             <span className="text-lg font-bold">
-                                <h1 className="font-bold text-xl underline">{bookObject.title} {bookObject.authors}</h1>
+                                <h1 className="font-bold text-xl text-left underline">{bookObject.title} {bookObject.authors}</h1>
                                     <Button className={`${saveButtonCn} mt-3 font-bold text-black border-0 bg-gray-300`}>
                                         <a href={bookObject.booklink} target="_blank" rel="noreferrer">Buy</a>
                                     </Button>

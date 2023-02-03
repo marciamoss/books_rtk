@@ -5,13 +5,14 @@ const initialState = {
   bookTitle: '',
   author: '',
   showList: false,
-  listFetching: false
+  listFetching: false,
+  sliderOpen: false
 };
 const bookSlice = createSlice({
   name: 'book',
   initialState,
   reducers: {
-    setBookTitle(state, action) {
+    setBookSliceData(state, action) {
       return { ...state, ...action.payload};
     }
   },
@@ -37,6 +38,6 @@ const bookSlice = createSlice({
   },
 });
 
-export const { setBookTitle } = bookSlice.actions;
+export const { setBookSliceData } = bookSlice.actions;
 export const bookReducer = bookSlice.reducer;
 

@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { authDataReducer, authDataInfo } from './slices/authDataSlice';
-import { bookReducer, setBookTitle } from './slices/bookSlice';
+import { bookReducer, setBookSliceData } from './slices/bookSlice';
 import { userDataReducer } from './slices/userDataSlice';
 
 import { authApi } from './apis/authApi';
@@ -26,7 +26,7 @@ export const store = configureStore({
 });
 setupListeners(store.dispatch);
 
-export { authDataInfo, setBookTitle };
+export { authDataInfo, setBookSliceData };
 
 export {
     useAuthChangeMutation,

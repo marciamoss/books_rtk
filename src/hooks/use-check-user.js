@@ -7,6 +7,7 @@ function useCheckUser(authUserId, userAdded) {
     const { refetch } = useFetchUserQuery(authUserId);
     const [saveButton, setSaveButton] = useState('');
     const [saveButtonCn, setSaveButtonCn] = useState('');
+    const [userInDb, setUserInDb] = useState(false);
 
     const {signedIn} = useSelector((state) => {
         return {
@@ -18,6 +19,7 @@ function useCheckUser(authUserId, userAdded) {
             try{
                 const inDb =  (await refetch(authUserId).unwrap());
                 if(inDb.length>0 || userAdded) {
+                    setUserInDb(inDb.length>0);
                     setSaveButtonCn('float-left mr-3');
                     setSaveButton(<Button className="font-bold text-black border-0 mt-3 mb-2 bg-blue-200">Save</Button>);
                 }
@@ -33,7 +35,8 @@ function useCheckUser(authUserId, userAdded) {
 
     return {
         saveButton,
-        saveButtonCn
+        saveButtonCn,
+        userInDb
     }
 }
 export default useCheckUser;
