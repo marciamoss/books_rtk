@@ -25,8 +25,8 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
                             : <img className="w-20 h-fit mr-5" src={bookObject.bookimg} alt="NoImageAvailable"/>}
                         </div>
                         <div className="w-4/5 mb-3">
-                            <span className="text-lg font-bold">
-                                <h1 className="font-bold text-xl text-left underline">{bookObject.title} {bookObject.authors}</h1>
+                            <span className="max-[640px]:text-sm text-lg font-bold">
+                                <h1 className="font-bold max-[640px]:text-sm text-xl text-left underline">{bookObject.title} {bookObject.authors}</h1>
                                     <Button className={`${saveButtonCn} mt-3 font-bold text-black border-0 bg-gray-300`}>
                                         <a href={bookObject.booklink} target="_blank" rel="noreferrer">Buy</a>
                                     </Button>
