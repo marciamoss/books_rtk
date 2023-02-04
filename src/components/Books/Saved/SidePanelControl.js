@@ -14,7 +14,7 @@ const SidePanelControl = ({userId, userInDb}) => {
     const dispatch = useDispatch();
     return (
         <div className={`${hidePanel} flex w-30 mr-5 flex-col space-y-2 border-gray-200 p-2`}>
-            <button disabled={disablePanel} className="max-[640px]:text-sm text-green-800 font-bold text-lg " onClick={()=>dispatch(setBookSliceData({sliderOpen:true}))}>
+            <button disabled={disablePanel} className="max-[640px]:text-sm text-blue-900 font-bold text-lg " onClick={()=>dispatch(setBookSliceData({sliderOpen:true}))}>
                 <MovingComponent
                     type="effect3D"
                     duration="1000ms"

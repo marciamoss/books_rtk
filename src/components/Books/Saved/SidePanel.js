@@ -60,7 +60,7 @@ const SidePanel = ({userId}) => {
                       </button>
                     </div>
                   </Transition.Child>
-                  <div className="flex h-full flex-col overflow-y-scroll bg-stone-400 py-6 shadow-xl">
+                  <div className="flex h-full flex-col overflow-y-scroll bg-yellow-50 py-6 shadow-xl">
                     <div className="px-4 sm:px-6">
                       <Dialog.Title className="max-[640px]:text-sm text-lg text-center font-bold text-gray-900 underline">Your Books</Dialog.Title>
                     </div>

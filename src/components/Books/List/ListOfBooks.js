@@ -5,6 +5,8 @@ import createBookObject from "../../../utils/createBookObject";
 import Button from "../../Button";
 import ExpandablePanel from '../../ExpandablePanel';
 import { GiBookCover } from 'react-icons/gi';
+import { RiBookMarkFill } from 'react-icons/ri';
+import { AiFillShopping } from 'react-icons/ai';
 import Skeleton from '../../Skeleton';
 
 const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
@@ -30,10 +32,8 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
                         <div className="w-4/5 mb-3">
                             <span className="max-[640px]:text-sm text-lg font-bold">
                                 <h1 className="font-bold max-[640px]:text-sm text-lg text-left underline">{bookObject.title} {bookObject.authors}</h1>
-                                    <Button className={`${userInDb ? 'float-left mr-3' : 'mb-2'} mt-3 font-bold text-black border-0 bg-gray-300`}>
-                                        <a href={bookObject.booklink} target="_blank" rel="noreferrer">Buy</a>
-                                    </Button>
-                                    {userInDb ? <Button onClick={()=>saveBook(bookObject)} className="font-bold text-black border-0 mt-3 mb-2 bg-blue-200">Save</Button> : ''}
+                                    <a className={`float-left border-0 block align-middle mt-2 mb-1`} href={bookObject.booklink} target="_blank" rel="noreferrer"><AiFillShopping size={20}/></a>
+                                    <Button onClick={()=>saveBook(bookObject)} disabled={`${userInDb ? false : true}`} className={`${userInDb ? 'visible':'invisible'} font-bold border-0 mb-2 mt-1`}><RiBookMarkFill size={20}/></Button>
                                     <ExpandablePanel header={<div className="font-bold">Synopsis</div>}>
                                         {bookObject.synopsis ? <p>{bookObject.synopsis}</p> : 'Not Available'}
                                     </ExpandablePanel>
