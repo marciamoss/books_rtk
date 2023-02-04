@@ -32,8 +32,8 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
                         <div className="w-4/5 mb-3">
                             <span className="max-[640px]:text-sm text-lg font-bold">
                                 <h1 className="font-bold max-[640px]:text-sm text-lg text-left underline">{bookObject.title} {bookObject.authors}</h1>
-                                    <a className={`float-left border-0 block align-middle mt-2 mb-1`} href={bookObject.booklink} target="_blank" rel="noreferrer"><AiFillShopping size={20}/></a>
-                                    <Button onClick={()=>saveBook(bookObject)} disabled={`${userInDb ? false : true}`} className={`${userInDb ? 'visible':'invisible'} font-bold border-0 mb-2 mt-1`}><RiBookMarkFill size={20}/></Button>
+                                    <a className="float-left border-0 mb-1 mr-2 mt-1 px-0 pt-0 pb-0 h-fit" href={bookObject.booklink} target="_blank" rel="noreferrer"><AiFillShopping size={25}/></a>
+                                    <Button onClick={()=>saveBook(bookObject)} disabled={`${userInDb ? false : true}`} className={`${userInDb ? 'visible':'invisible'} border-0 mb-1 mt-1 px-0 pt-0 pb-0 h-fit`}><RiBookMarkFill size={25}/></Button>
                                     <ExpandablePanel header={<div className="font-bold">Synopsis</div>}>
                                         {bookObject.synopsis ? <p>{bookObject.synopsis}</p> : 'Not Available'}
                                     </ExpandablePanel>

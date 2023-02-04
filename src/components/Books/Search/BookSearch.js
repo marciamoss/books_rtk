@@ -6,6 +6,7 @@ import ListOfBooks from "../List/ListOfBooks";
 import Button from "../../Button";
 import SidePanelControl from "../Saved/SidePanelControl";
 import {useCheckUser} from '../../../hooks';
+import { BsSearch } from 'react-icons/bs';
 
 const BookSearch = ({authUserId, userAdded}) => {
     const dispatch = useDispatch();
@@ -42,9 +43,7 @@ const BookSearch = ({authUserId, userAdded}) => {
                             value={author}
                             onChange={(event) => dispatch(setBookSliceData({author: event.target.value, showList: false}))}
                         />
-                        <Button className="mt-2 float-right text-black bg-blue-300" type="submit" loading={listFetching}>
-                            Submit
-                        </Button>
+                        <Button className="mt-2 float-right border-0" type="submit" loading={listFetching}><BsSearch size={25}/></Button>
                         {(showList) ? <ListOfBooks bookTitle={bookTitle} author={author} authUserId={authUserId} userAdded={userAdded}/> : ''}
                     </form>
                 </div>
