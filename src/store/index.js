@@ -33,6 +33,8 @@ export {
 } from './apis/authApi';
 export {
   useSearchBooksQuery,
+  useFetchBooksQuery,
+  useSaveUserBookMutation,
 } from './apis/booksApi';
 export {
   useFetchUserQuery,

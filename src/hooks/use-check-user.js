@@ -7,7 +7,7 @@ function useCheckUser(authUserId, userAdded) {
 
     useEffect(() => {
         const checkUser  = async () => {
-            try{
+            try {
                 const inDb =  (await refetch(authUserId).unwrap());
                 if(authUserId && (inDb.length>0 || userAdded)) {
                     setUserInDb(true);

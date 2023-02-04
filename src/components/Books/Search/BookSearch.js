@@ -48,7 +48,7 @@ const BookSearch = ({authUserId, userAdded}) => {
                         {(showList) ? <ListOfBooks bookTitle={bookTitle} author={author} authUserId={authUserId} userAdded={userAdded}/> : ''}
                     </form>
                 </div>
-                {authUserId && (userInDb || userAdded) ? <SidePanelControl/> : ''}
+                <SidePanelControl userId={authUserId} userInDb={userInDb}/>
             </div>
         </main>
     )

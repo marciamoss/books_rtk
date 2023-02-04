@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Dialog, Transition } from '@headlessui/react'
 import { AiOutlineClose } from 'react-icons/ai';
 import { setBookSliceData } from '../../../store';
+import SavedBooksList from './SavedBooksList'
 
-const SidePanel = () => {
+const SidePanel = ({userId}) => {
   const dispatch = useDispatch();
   const {sliderOpen} = useSelector((state) => {
       return {
@@ -61,11 +62,13 @@ const SidePanel = () => {
                   </Transition.Child>
                   <div className="flex h-full flex-col overflow-y-scroll bg-stone-400 py-6 shadow-xl">
                     <div className="px-4 sm:px-6">
-                      <Dialog.Title className="max-[640px]:text-sm text-lg text-center font-bold text-gray-900">Your Books</Dialog.Title>
+                      <Dialog.Title className="max-[640px]:text-sm text-lg text-center font-bold text-gray-900 underline">Your Books</Dialog.Title>
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
                       <div className="absolute inset-0 px-4 sm:px-6">
-                        <div className="h-full border-2 border-dashed border-gray-200" aria-hidden="true" />
+                        <div className="h-fit" aria-hidden="true">
+                          <SavedBooksList userId={userId}/>
+                        </div>
                       </div>
                     </div>
                   </div>

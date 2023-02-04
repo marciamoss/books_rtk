@@ -1,5 +1,5 @@
 import React from "react";
-import { useSearchBooksQuery } from '../../../store';
+import { useSearchBooksQuery, useSaveUserBookMutation } from '../../../store';
 import {useCheckUser} from '../../../hooks';
 import createBookObject from "../../../utils/createBookObject";
 import Button from "../../Button";
@@ -10,7 +10,10 @@ import Skeleton from '../../Skeleton';
 const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
     const {userInDb} = useCheckUser(authUserId, userAdded);
     const {data, error, isFetching} = useSearchBooksQuery({bookTitle, author});
-
+    const [saveUserBook] = useSaveUserBookMutation();
+    const saveBook = (book) => {
+        saveUserBook({...book, ...{userId: authUserId}});
+    }
     let content;
     if (isFetching) {
         content = <Skeleton className="h-10 w-full container" times={10} />;
@@ -30,7 +33,7 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
                                     <Button className={`${userInDb ? 'float-left mr-3' : 'mb-2'} mt-3 font-bold text-black border-0 bg-gray-300`}>
                                         <a href={bookObject.booklink} target="_blank" rel="noreferrer">Buy</a>
                                     </Button>
-                                    {userInDb ? <Button className="font-bold text-black border-0 mt-3 mb-2 bg-blue-200">Save</Button> : ''}
+                                    {userInDb ? <Button onClick={()=>saveBook(bookObject)} className="font-bold text-black border-0 mt-3 mb-2 bg-blue-200">Save</Button> : ''}
                                     <ExpandablePanel header={<div className="font-bold">Synopsis</div>}>
                                         {bookObject.synopsis ? <p>{bookObject.synopsis}</p> : 'Not Available'}
                                     </ExpandablePanel>
@@ -41,7 +44,7 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
             );
         })
         :
-            error ? <div className="text-center mt-28 text-red-600 font-extrabold text-2xl">Error fetching data... "{error.data.error.message}"</div>
+            error ? <div className="text-center mt-28 text-red-600 font-extrabold text-2xl">Error searching books...</div>
         :   !(data?.items) ? <div className="text-center mt-28 text-red-800 font-extrabold text-2xl">No books found for this title</div> : '';
     }
     return <div className="mt-20">

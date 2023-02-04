@@ -5,11 +5,16 @@ import { setBookSliceData } from '../../../store';
 import SidePanel from "./SidePanel";
 import { BsChevronDoubleLeft } from 'react-icons/bs';
 
-const SidePanelControl = () => {
+const SidePanelControl = ({userId, userInDb}) => {
+    let hidePanel = 'invisible'; let disablePanel = true;
+    if(userInDb) {
+        hidePanel = 'visible';
+        disablePanel = false;
+    }
     const dispatch = useDispatch();
     return (
-        <div className="flex w-30 mr-5 flex-col space-y-2 border-gray-200 p-2">
-            <button className="max-[640px]:text-sm text-green-800 font-bold text-lg " onClick={()=>dispatch(setBookSliceData({sliderOpen:true}))}>
+        <div className={`${hidePanel} flex w-30 mr-5 flex-col space-y-2 border-gray-200 p-2`}>
+            <button disabled={disablePanel} className="max-[640px]:text-sm text-green-800 font-bold text-lg " onClick={()=>dispatch(setBookSliceData({sliderOpen:true}))}>
                 <MovingComponent
                     type="effect3D"
                     duration="1000ms"
@@ -20,7 +25,7 @@ const SidePanelControl = () => {
                     <div className="flex"><BsChevronDoubleLeft size={40}/><p className="self-center">Open</p></div>
                 </MovingComponent>
             </button>
-            <SidePanel/> 
+            <SidePanel userId={userId}/>
         </div>
     );
 }
