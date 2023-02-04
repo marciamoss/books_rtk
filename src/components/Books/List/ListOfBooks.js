@@ -25,11 +25,11 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
             return (
                 <div className="container w-full" key={bookObject.id}>
                     <div className="flex">
-                        <div className="w-1/10 mb-3">
-                            {!bookObject.bookimg ? <GiBookCover className="w-20 h-fit mr-5"/>
-                            : <img className="w-20 h-fit mr-5" src={bookObject.bookimg} alt="NoImageAvailable"/>}
+                        <div className="w-1/10 mb-1 p-1">
+                            {!bookObject.bookimg ? <GiBookCover className="w-20 h-25 mr-5"/>
+                            : <img className="w-20 h-25 mr-1" src={bookObject.bookimg} alt="NoImageAvailable"/>}
                         </div>
-                        <div className="w-4/5 mb-3">
+                        <div className="w-4/5 mb-1">
                             <span className="max-[640px]:text-sm text-lg font-bold">
                                 <h1 className="font-bold max-[640px]:text-sm text-lg text-left underline">{bookObject.title} {bookObject.authors}</h1>
                                     <a className="float-left border-0 mb-1 mr-2 mt-1 px-0 pt-0 pb-0 h-fit" href={bookObject.booklink} target="_blank" rel="noreferrer"><AiFillShopping size={25}/></a>

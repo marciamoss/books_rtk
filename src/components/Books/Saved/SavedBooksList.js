@@ -15,11 +15,11 @@ const SavedBooksList = ({userId}) => {
             return (
                 <div className="container w-full" key={bookObject.id}>
                     <div className="flex">
-                        <div className="w-1/10 mb-3">
-                            {!bookObject.bookimg ? <GiBookCover className="w-10 h-fit mr-5"/>
-                            : <img className="w-10 h-fit mr-5" src={bookObject.bookimg} alt="NoImageAvailable"/>}
+                        <div className="w-1/10 mb-1 p-1">
+                            {!bookObject.bookimg ? <GiBookCover className="w-10 h-10 mr-5"/>
+                            : <img className="w-10 h-10 mr-1" src={bookObject.bookimg} alt="NoImageAvailable"/>}
                         </div>
-                        <div className="w-4/5 mb-3">
+                        <div className="w-4/5 mb-1">
                             <span className="text-sm">
                                 <h1 className="text-sm text-left underline">{bookObject.title} {bookObject.authors}</h1>
                                     <ExpandablePanel header={<div className="font-bold">Synopsis</div>}>
