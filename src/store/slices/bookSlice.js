@@ -25,7 +25,7 @@ const bookSlice = createSlice({
         state.failedActionId='';
       }else if(action.payload.savedId) {
         state.savedId='';
-        state.searchResults=state.searchResults.filter(book => book.id !== action.payload.savedId);
+        // state.searchResults=state.searchResults.filter(book => book.id !== action.payload.savedId);
       }
     }
   },
