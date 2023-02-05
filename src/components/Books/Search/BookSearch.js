@@ -4,7 +4,7 @@ import { setBookSliceData } from '../../../store';
 import "./BookSearch.css";
 import ListOfBooks from "../List/ListOfBooks";
 import Button from "../../Button";
-import SidePanelControl from "../Saved/SidePanelControl";
+import SidePanel from "../Saved/SidePanel";
 import {useCheckUser} from '../../../hooks';
 import { BsSearch } from 'react-icons/bs';
 
@@ -47,7 +47,7 @@ const BookSearch = ({authUserId, userAdded}) => {
                         {(showList) ? <ListOfBooks bookTitle={bookTitle} author={author} authUserId={authUserId} userAdded={userAdded}/> : ''}
                     </form>
                 </div>
-                <SidePanelControl userId={authUserId} userInDb={userInDb}/>
+                <SidePanel userId={authUserId} userInDb={userInDb}/>
             </div>
         </main>
     )
