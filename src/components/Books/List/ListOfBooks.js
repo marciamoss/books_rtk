@@ -10,11 +10,11 @@ import { RiBookMarkFill } from 'react-icons/ri';
 import { AiFillShopping } from 'react-icons/ai';
 import { FaInfoCircle } from 'react-icons/fa';
 import Skeleton from '../../Skeleton';
+import uniqby from 'lodash.uniqby';
 
 const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
-    const {searchResults, savedId, failedActionId} = useSelector((state) => {
+    const {savedId, failedActionId} = useSelector((state) => {
         return {
-            searchResults: state.book.searchResults,
             savedId: state.book.savedId,
             failedActionId: state.book.failedActionId
         };
@@ -28,6 +28,10 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
     if (isFetching) {
         content = <Skeleton className="h-10 w-full container" times={10} />;
     } else {
+        let searchResults = [];
+        if(data?.items?.length>0){
+            searchResults = uniqby(data?.items, 'id');
+        }
         content = (searchResults.length > 0) ? searchResults.map((book) => {
             const bookObject = createBookObject(book);
             return (

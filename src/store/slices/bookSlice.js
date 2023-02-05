@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { booksApi } from '../apis/booksApi';
-import uniqby from 'lodash.uniqby';
 
 const initialState = {
   bookTitle: '',
@@ -8,7 +7,6 @@ const initialState = {
   showList: false,
   listFetching: false,
   sliderOpen: false,
-  searchResults: [],
   savedBooks: [],
   savedId:'',
   failedActionId: ''
@@ -25,7 +23,6 @@ const bookSlice = createSlice({
         state.failedActionId='';
       }else if(action.payload.savedId) {
         state.savedId='';
-        // state.searchResults=state.searchResults.filter(book => book.id !== action.payload.savedId);
       }
     }
   },
@@ -40,7 +37,6 @@ const bookSlice = createSlice({
       booksApi.endpoints.searchBooks.matchFulfilled,
       (state, { payload }) => {
         state.listFetching = false;
-        state.searchResults = uniqby(payload?.items, 'id');
       }
     );
     builder.addMatcher(
