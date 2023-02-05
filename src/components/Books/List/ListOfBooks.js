@@ -1,33 +1,47 @@
 import React from "react";
-import { useSearchBooksQuery, useSaveUserBookMutation } from '../../../store';
-import {useCheckUser} from '../../../hooks';
+import { useSelector } from 'react-redux';
+import { useSearchBooksQuery } from '../../../store';
+import {useCheckUser, useBookAction} from '../../../hooks';
 import createBookObject from "../../../utils/createBookObject";
 import Button from "../../Button";
 import ExpandablePanel from '../../ExpandablePanel';
 import { GiBookCover } from 'react-icons/gi';
 import { RiBookMarkFill } from 'react-icons/ri';
 import { AiFillShopping } from 'react-icons/ai';
+import { FaInfoCircle } from 'react-icons/fa';
 import Skeleton from '../../Skeleton';
 
 const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
+    const {searchResults, savedId, failedActionId} = useSelector((state) => {
+        return {
+            searchResults: state.book.searchResults,
+            savedId: state.book.savedId,
+            failedActionId: state.book.failedActionId
+        };
+    });
     const {userInDb} = useCheckUser(authUserId, userAdded);
     const {data, error, isFetching} = useSearchBooksQuery({bookTitle, author});
-    const [saveUserBook] = useSaveUserBookMutation();
-    const saveBook = (book) => {
-        saveUserBook({...book, ...{userId: authUserId}});
-    }
+
+    const {saveBook, previouslySaved} = useBookAction(authUserId);
+
     let content;
     if (isFetching) {
         content = <Skeleton className="h-10 w-full container" times={10} />;
     } else {
-        content = (data?.items?.length > 0) ? data?.items?.map((book) => {
+        content = (searchResults.length > 0) ? searchResults.map((book) => {
             const bookObject = createBookObject(book);
             return (
                 <div className="container w-full" key={bookObject.id}>
+                    {(savedId === bookObject.id || failedActionId === bookObject.id) ?
+                        <div className={`flex items-center ${failedActionId ? 'bg-red-600':'bg-green-500'} text-white text-lg font-bold px-4 py-3" role="alert"`}>
+                            <FaInfoCircle/>
+                            {failedActionId ? <p className="ml-1">Save Action Failed At This Time!</p> :
+                                <p className="ml-1">{previouslySaved ? `Previously Bookmarked ${bookObject.title}` : `Bookmarked ${bookObject.title}`}</p>}
+                        </div> : ''}
                     <div className="flex">
                         <div className="w-1/10 mb-1 p-1">
-                            {!bookObject.bookimg ? <GiBookCover className="w-20 h-25 mr-5"/>
-                            : <img className="w-20 h-25 mr-1" src={bookObject.bookimg} alt="NoImageAvailable"/>}
+                            {!bookObject.bookimg ? <GiBookCover className="w-20 h-20 mr-5"/>
+                            : <img className="w-20 h-20 mr-1" src={bookObject.bookimg} alt="NoImageAvailable"/>}
                         </div>
                         <div className="w-4/5 mb-1">
                             <span className="max-[640px]:text-sm text-lg font-bold">

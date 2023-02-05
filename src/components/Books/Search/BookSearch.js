@@ -20,7 +20,7 @@ const BookSearch = ({authUserId, userAdded}) => {
         };
     });
 
-    const fetchBooks = (event) => {
+    const showBooks = (event) => {
         event.preventDefault();
         if(bookTitle) {
             dispatch(setBookSliceData({showList: true}));
@@ -31,7 +31,7 @@ const BookSearch = ({authUserId, userAdded}) => {
         <main className="min-h-screen w-full">
             <div className="flex">
                 <div className="w-3/4 form container">
-                    <form className="max-[640px]:text-sm text-lg font-bold" onSubmit={fetchBooks}>
+                    <form className="max-[640px]:text-sm text-lg font-bold" onSubmit={showBooks}>
                         <h2 className="max-[640px]:text-sm text-lg mt-3 font-bold">Find Books</h2>
                         <input className="input w-full mt-1 rounded-lg border border-slate-400 px-2 text-slate-900 placeholder-slate-400 transition-colors duration-300 focus:border-sky-400 focus:outline-none"
                             placeholder="Book Title (Required)"

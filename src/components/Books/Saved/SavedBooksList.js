@@ -1,11 +1,23 @@
-import React from "react";
-import { useFetchBooksQuery } from '../../../store';
+import React, {useState} from "react";
+import { useFetchUserBooksQuery, useDeleteUserBookMutation } from '../../../store';
 import Skeleton from '../../Skeleton';
 import { GiBookCover } from 'react-icons/gi';
 import ExpandablePanel from '../../ExpandablePanel';
+import ConfirmModal from '../../ConfirmModal';
+import Button from "../../Button";
+import { BiTrash, BiShoppingBag } from 'react-icons/bi';
 
 const SavedBooksList = ({userId}) => {
-    const {data, error, isFetching} = useFetchBooksQuery(userId);
+    const {data, error, isFetching} = useFetchUserBooksQuery(userId);
+    const [deleteUserBook] = useDeleteUserBookMutation();
+
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
+    const [current, setCurrent] = useState('');
+
+    const deletBook = (book) => {
+        setCurrent(book)
+        setDeleteConfirm(true);
+    }
 
     let content;
     if (isFetching) {
@@ -22,7 +34,9 @@ const SavedBooksList = ({userId}) => {
                         <div className="w-4/5 mb-1">
                             <span className="text-sm">
                                 <h1 className="text-sm text-left underline">{bookObject.title} {bookObject.authors}</h1>
-                                    <ExpandablePanel header={<div className="font-bold">Synopsis</div>}>
+                                <a className="float-left border-0 mr-2 mb-1 mt-1 px-0 pt-0 pb-0 h-fit" href={bookObject.booklink} target="_blank" rel="noreferrer"><BiShoppingBag size={25}/></a>
+                                <Button onClick={() => deletBook(bookObject)} className={`border-0 mb-1 mt-1 px-0 pt-0 pb-0 h-fit`}><BiTrash size={25}/></Button>
+                                    <ExpandablePanel header={<div>Synopsis</div>}>
                                         {bookObject.synopsis ? <p>{bookObject.synopsis}</p> : 'Not Available'}
                                     </ExpandablePanel>
                             </span>
@@ -37,7 +51,10 @@ const SavedBooksList = ({userId}) => {
     }
 
     return (
-        <div>{content}</div>
+        <div>
+            {deleteConfirm ? <ConfirmModal setDeleteConfirm={setDeleteConfirm} deleteUserBook={deleteUserBook} book={current} confirmMessage={`Delete Confirmation on "${current.title}"?`}/> : ''}
+            {content}
+        </div>
     )
 }
 

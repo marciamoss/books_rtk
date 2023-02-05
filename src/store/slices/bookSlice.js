@@ -1,12 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { booksApi } from '../apis/booksApi';
+import uniqby from 'lodash.uniqby';
 
 const initialState = {
   bookTitle: '',
   author: '',
   showList: false,
   listFetching: false,
-  sliderOpen: false
+  sliderOpen: false,
+  searchResults: [],
+  savedBooks: [],
+  savedId:'',
+  failedActionId: ''
 };
 const bookSlice = createSlice({
   name: 'book',
@@ -14,6 +19,14 @@ const bookSlice = createSlice({
   reducers: {
     setBookSliceData(state, action) {
       return { ...state, ...action.payload};
+    },
+    resetAlertPopup(state, action) {
+      if(action.payload.failedActionId) {
+        state.failedActionId='';
+      }else if(action.payload.savedId) {
+        state.savedId='';
+        state.searchResults=state.searchResults.filter(book => book.id !== action.payload.savedId);
+      }
     }
   },
   extraReducers: (builder) => {
@@ -27,6 +40,7 @@ const bookSlice = createSlice({
       booksApi.endpoints.searchBooks.matchFulfilled,
       (state, { payload }) => {
         state.listFetching = false;
+        state.searchResults = uniqby(payload?.items, 'id');
       }
     );
     builder.addMatcher(
@@ -35,9 +49,36 @@ const bookSlice = createSlice({
         state.listFetching = false;
       }
     );
+    builder.addMatcher(
+      booksApi.endpoints.saveUserBook.matchPending,
+      (state, { payload }) => {
+        state.savedId="";
+        state.failedActionId='';
+      }
+    );
+    builder.addMatcher(
+      booksApi.endpoints.saveUserBook.matchFulfilled,
+      (state, { payload }) => {
+        state.savedId = payload.id;
+        state.failedActionId='';
+      }
+    );
+    builder.addMatcher(
+      booksApi.endpoints.saveUserBook.matchRejected,
+      (state, { payload, meta, error }) => {
+        state.failedActionId = meta.arg.originalArgs.id;
+        state.savedId="";
+      }
+    );
+    builder.addMatcher(
+      booksApi.endpoints.fetchUserBooks.matchFulfilled,
+      (state, { payload }) => {
+        state.savedBooks = payload;
+      }
+    );
   },
 });
 
-export const { setBookSliceData } = bookSlice.actions;
+export const { setBookSliceData, resetAlertPopup } = bookSlice.actions;
 export const bookReducer = bookSlice.reducer;
 

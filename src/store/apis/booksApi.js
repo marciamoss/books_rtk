@@ -34,7 +34,7 @@ const booksApi = createApi({
               };
             },
           }),
-          fetchBooks: builder.query({
+          fetchUserBooks: builder.query({
             providesTags: (result, error, user) => {
               let tags;
               if(result) {
@@ -54,13 +54,25 @@ const booksApi = createApi({
               };
             },
           }),
+          deleteUserBook: builder.mutation({
+            invalidatesTags: (result, error, book) => {
+              return [{ type: 'UsersBooks', id: book.userId }];
+            },
+            query: (book) => {
+              return {
+                url: `/api/books/${book._id}`,
+                method: 'DELETE',
+              };
+            },
+          }),
         };
     },
 });
 
 export const {
   useSearchBooksQuery,
-  useFetchBooksQuery,
+  useFetchUserBooksQuery,
   useSaveUserBookMutation,
+  useDeleteUserBookMutation
 } = booksApi;
 export { booksApi };
