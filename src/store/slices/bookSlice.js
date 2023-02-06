@@ -9,7 +9,8 @@ const initialState = {
   sliderOpen: false,
   savedBooks: [],
   savedId:'',
-  failedActionId: ''
+  saveFailId: '',
+  deleteFailId: ''
 };
 const bookSlice = createSlice({
   name: 'book',
@@ -19,8 +20,10 @@ const bookSlice = createSlice({
       return { ...state, ...action.payload};
     },
     resetAlertPopup(state, action) {
-      if(action.payload.failedActionId) {
-        state.failedActionId='';
+      if(action.payload.saveFailId) {
+        state.saveFailId='';
+      }else if(action.payload.deleteFailId) {
+        state.deleteFailId='';
       }else if(action.payload.savedId) {
         state.savedId='';
       }
@@ -49,20 +52,20 @@ const bookSlice = createSlice({
       booksApi.endpoints.saveUserBook.matchPending,
       (state, { payload }) => {
         state.savedId="";
-        state.failedActionId='';
+        state.saveFailId='';
       }
     );
     builder.addMatcher(
       booksApi.endpoints.saveUserBook.matchFulfilled,
       (state, { payload }) => {
         state.savedId = payload.id;
-        state.failedActionId='';
+        state.saveFailId='';
       }
     );
     builder.addMatcher(
       booksApi.endpoints.saveUserBook.matchRejected,
       (state, { payload, meta, error }) => {
-        state.failedActionId = meta.arg.originalArgs.id;
+        state.saveFailId = meta.arg.originalArgs.id;
         state.savedId="";
       }
     );
@@ -70,6 +73,24 @@ const bookSlice = createSlice({
       booksApi.endpoints.fetchUserBooks.matchFulfilled,
       (state, { payload }) => {
         state.savedBooks = payload;
+      }
+    );
+    builder.addMatcher(
+      booksApi.endpoints.deleteUserBook.matchPending,
+      (state, { payload }) => {
+        state.deleteFailId='';
+      }
+    );
+    builder.addMatcher(
+      booksApi.endpoints.deleteUserBook.matchFulfilled,
+      (state, { payload }) => {
+        state.deleteFailId='';
+      }
+    );
+    builder.addMatcher(
+      booksApi.endpoints.deleteUserBook.matchRejected,
+      (state, { payload, meta, error }) => {
+        state.deleteFailId = meta.arg.originalArgs.id;
       }
     );
   },

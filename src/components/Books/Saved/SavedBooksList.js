@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import { useSelector } from 'react-redux';
 import { useFetchUserBooksQuery, useDeleteUserBookMutation } from '../../../store';
 import Skeleton from '../../Skeleton';
 import { GiBookCover } from 'react-icons/gi';
@@ -6,8 +7,14 @@ import ExpandablePanel from '../../ExpandablePanel';
 import ConfirmModal from '../../ConfirmModal';
 import Button from "../../Button";
 import { BiTrash, BiShoppingBag } from 'react-icons/bi';
+import { FaInfoCircle } from 'react-icons/fa';
 
 const SavedBooksList = ({userId}) => {
+    const {deleteFailId} = useSelector((state) => {
+        return {
+            deleteFailId: state.book.deleteFailId
+        };
+    });
     const {data, error, isFetching} = useFetchUserBooksQuery(userId);
     const [deleteUserBook] = useDeleteUserBookMutation();
 
@@ -26,6 +33,12 @@ const SavedBooksList = ({userId}) => {
         content = (data?.length > 0) ? data?.map((bookObject) => {
             return (
                 <div className="container w-full" key={bookObject.id}>
+                        {(deleteFailId === bookObject.id) ?
+                            <div className="flex items-center bg-red-600 text-white text-lg font-bold px-4 py-3" role="alert">
+                                <FaInfoCircle/>
+                                <p className="ml-1">Delete Action Failed At This Time!</p>
+                            </div>
+                        : ''}
                     <div className="flex">
                         <div className="w-1/10 mb-1 p-1">
                             {!bookObject.bookimg ? <GiBookCover className="w-10 h-10 mr-5"/>

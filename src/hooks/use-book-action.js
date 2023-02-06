@@ -8,11 +8,12 @@ function useBookAction(authUserId) {
     const [previouslySaved, setPreviouslySaved] = useState(false);
     useFetchUserBooksQuery(authUserId);
 
-    const {savedBooks, savedId, failedActionId} = useSelector((state) => {
+    const {savedBooks, savedId, saveFailId, deleteFailId} = useSelector((state) => {
         return {
             savedBooks: state.book.savedBooks,
             savedId: state.book.savedId,
-            failedActionId: state.book.failedActionId
+            saveFailId: state.book.saveFailId,
+            deleteFailId: state.book.deleteFailId
         };
     });
     const saveBook = (book) => {
@@ -35,10 +36,13 @@ function useBookAction(authUserId) {
         if(savedId) {
             resetAlert({savedId});
         }
-        if(failedActionId) {
-            resetAlert({failedActionId});
+        if(saveFailId) {
+            resetAlert({saveFailId});
         }
-    }, [savedId, failedActionId, dispatch, resetAlert]);
+        if(deleteFailId) {
+            resetAlert({deleteFailId});
+        }
+    }, [savedId, saveFailId, deleteFailId, dispatch, resetAlert]);
 
     return {
         saveBook,

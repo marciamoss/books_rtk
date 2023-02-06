@@ -13,10 +13,10 @@ import Skeleton from '../../Skeleton';
 import uniqby from 'lodash.uniqby';
 
 const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
-    const {savedId, failedActionId} = useSelector((state) => {
+    const {savedId, saveFailId} = useSelector((state) => {
         return {
             savedId: state.book.savedId,
-            failedActionId: state.book.failedActionId
+            saveFailId: state.book.saveFailId
         };
     });
     const {userInDb} = useCheckUser(authUserId, userAdded);
@@ -36,10 +36,10 @@ const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
             const bookObject = createBookObject(book);
             return (
                 <div className="container w-full" key={bookObject.id}>
-                    {(savedId === bookObject.id || failedActionId === bookObject.id) ?
-                        <div className={`flex items-center ${failedActionId ? 'bg-red-600':'bg-green-500'} text-white text-lg font-bold px-4 py-3" role="alert"`}>
+                    {(savedId === bookObject.id || saveFailId === bookObject.id) ?
+                        <div className={`flex items-center ${saveFailId ? 'bg-red-600':'bg-green-500'} text-white text-lg font-bold px-4 py-3" role="alert"`}>
                             <FaInfoCircle/>
-                            {failedActionId ? <p className="ml-1">Save Action Failed At This Time!</p> :
+                            {saveFailId ? <p className="ml-1">Save Action Failed At This Time!</p> :
                                 <p className="ml-1">{previouslySaved ? `Previously Bookmarked ${bookObject.title}` : `Bookmarked ${bookObject.title}`}</p>}
                         </div> : ''}
                     <div className="flex">
