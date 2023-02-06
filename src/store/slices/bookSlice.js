@@ -7,6 +7,7 @@ const initialState = {
   showList: false,
   listFetching: false,
   sliderOpen: false,
+  searchResults: [],
   savedBooks: [],
   savedId:'',
   saveFailId: '',
@@ -26,6 +27,7 @@ const bookSlice = createSlice({
         state.deleteFailId='';
       }else if(action.payload.savedId) {
         state.savedId='';
+        state.searchResults=state.searchResults.filter(book => book.id !== action.payload.savedId);
       }
     }
   },

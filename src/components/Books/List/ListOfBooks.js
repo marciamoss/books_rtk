@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from 'react-redux';
 import { useSearchBooksQuery } from '../../../store';
-import {useCheckUser, useBookAction} from '../../../hooks';
+import {useCheckUser, useBookAction, useSetSearchResults} from '../../../hooks';
 import createBookObject from "../../../utils/createBookObject";
 import Button from "../../Button";
 import ExpandablePanel from '../../ExpandablePanel';
@@ -10,28 +10,26 @@ import { RiBookMarkFill } from 'react-icons/ri';
 import { AiFillShopping } from 'react-icons/ai';
 import { FaInfoCircle } from 'react-icons/fa';
 import Skeleton from '../../Skeleton';
-import uniqby from 'lodash.uniqby';
 
 const ListOfBooks = ({bookTitle, author, authUserId, userAdded}) => {
-    const {savedId, saveFailId} = useSelector((state) => {
+    const {savedId, saveFailId, searchResults} = useSelector((state) => {
         return {
             savedId: state.book.savedId,
-            saveFailId: state.book.saveFailId
+            saveFailId: state.book.saveFailId,
+            searchResults: state.book.searchResults
         };
     });
     const {userInDb} = useCheckUser(authUserId, userAdded);
     const {data, error, isFetching} = useSearchBooksQuery({bookTitle, author});
-
     const {saveBook, previouslySaved} = useBookAction(authUserId);
+    useSetSearchResults(data);
 
     let content;
     if (isFetching) {
         content = <Skeleton className="h-10 w-full container" times={10} />;
+    } else if(searchResults.length===0 && data?.items?.length>0) {
+        content=<div className="text-center mt-28 text-green-800 font-extrabold text-2xl">All the books for this title have been saved, Search for a new book</div>;
     } else {
-        let searchResults = [];
-        if(data?.items?.length>0){
-            searchResults = uniqby(data?.items, 'id');
-        }
         content = (searchResults.length > 0) ? searchResults.map((book) => {
             const bookObject = createBookObject(book);
             return (
