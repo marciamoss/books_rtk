@@ -1,12 +1,16 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { setupListeners } from '@reduxjs/toolkit/query';
-import { authDataReducer, authDataInfo } from './slices/authDataSlice';
-import { bookReducer, setBookSliceData, resetAlertPopup } from './slices/bookSlice';
-import { userDataReducer } from './slices/userDataSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/query";
+import { authDataReducer, authDataInfo } from "./slices/authDataSlice";
+import {
+  bookReducer,
+  setBookSliceData,
+  resetAlertPopup,
+} from "./slices/bookSlice";
+import { userDataReducer } from "./slices/userDataSlice";
 
-import { authApi } from './apis/authApi';
-import { booksApi } from './apis/booksApi';
-import { userApi } from './apis/userApi';
+import { authApi } from "./apis/authApi";
+import { booksApi } from "./apis/booksApi";
+import { userApi } from "./apis/userApi";
 
 export const store = configureStore({
   reducer: {
@@ -28,16 +32,11 @@ setupListeners(store.dispatch);
 
 export { authDataInfo, setBookSliceData, resetAlertPopup };
 
-export {
-    useAuthChangeMutation,
-} from './apis/authApi';
+export { useLogInMutation, useLogOutMutation } from "./apis/authApi";
 export {
   useSearchBooksQuery,
   useFetchUserBooksQuery,
   useSaveUserBookMutation,
-  useDeleteUserBookMutation
-} from './apis/booksApi';
-export {
-  useFetchUserQuery,
-  useAddUserMutation,
-} from './apis/userApi';
+  useDeleteUserBookMutation,
+} from "./apis/booksApi";
+export { useFetchUserQuery, useAddUserMutation } from "./apis/userApi";
