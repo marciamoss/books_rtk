@@ -1,12 +1,15 @@
 import React from "react";
 import { useLogInMutation, useLogOutMutation } from "../../store";
-import { Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { useSelector } from "react-redux";
 import { authDataInfo } from "../../store";
-// import PageNotFound from '../PageNotFound/PageNotFound';
+import { useCheckRoute } from "../../hooks";
+import PageNotFound from "../PageNotFound";
 
 const Header = () => {
+  useCheckRoute();
+  const location = useLocation();
   const [logIn] = useLogInMutation();
   const [logOut] = useLogOutMutation();
 
@@ -20,6 +23,10 @@ const Header = () => {
       };
     }
   );
+
+  if (location.pathname !== "/") {
+    return <PageNotFound />;
+  }
 
   return (
     <nav className="py-6 px-10 w-full bg-black">

@@ -1,6 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { authDataReducer, authDataInfo } from "./slices/authDataSlice";
+import {
+  authDataReducer,
+  authDataInfo,
+  validRoute,
+} from "./slices/authDataSlice";
 import {
   bookReducer,
   setBookSliceData,
@@ -30,7 +34,7 @@ export const store = configureStore({
 });
 setupListeners(store.dispatch);
 
-export { authDataInfo, setBookSliceData, resetAlertPopup };
+export { authDataInfo, validRoute, setBookSliceData, resetAlertPopup };
 
 export { useLogInMutation, useLogOutMutation } from "./apis/authApi";
 export {

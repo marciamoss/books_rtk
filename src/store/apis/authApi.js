@@ -19,6 +19,14 @@ const authApi = createApi({
       queryFn: async ({ authDataInfo }, { dispatch }) => {
         const handleGoogleSignIn = (response) => {
           const responsePayload = jwt_decode(response.credential);
+          localStorage.setItem(
+            "books_rtk",
+            JSON.stringify({
+              token: null,
+              authUserId: responsePayload.sub,
+              userName: responsePayload.name,
+            })
+          );
           dispatch(
             authDataInfo({
               ...initial,
@@ -43,7 +51,7 @@ const authApi = createApi({
         { authDataInfo, initialRender = false },
         { dispatch, getState }
       ) => {
-        if (window.google) {
+        if (window.google && getState().authData.validRoute) {
           await dispatch(authApi.endpoints.gInit.initiate({ authDataInfo }));
           await window.google.accounts.id.prompt(async (response) => {
             await dispatch(
@@ -91,7 +99,11 @@ const authApi = createApi({
                 );
               }
             } else if (response.isSkippedMoment()) {
-              if (oneStepFailReason !== "tap_outside") {
+              if (
+                ["tap_outside", "user_cancel"].indexOf(
+                  response.getSkippedReason()
+                ) === -1
+              ) {
                 dispatch(
                   authDataInfo({
                     ...initial,
@@ -148,6 +160,14 @@ const authApi = createApi({
             }
           );
           const profileData = await profile.json();
+          localStorage.setItem(
+            "books_rtk",
+            JSON.stringify({
+              token: access_token,
+              authUserId: profileData.id,
+              userName: profileData.name,
+            })
+          );
           dispatch(
             authDataInfo({
               ...initial,
@@ -175,6 +195,7 @@ const authApi = createApi({
     }),
     logOut: builder.mutation({
       queryFn: async ({ authDataInfo }, { dispatch, getState }) => {
+        localStorage.removeItem("books_rtk");
         const revokeFn = getState().authData.token
           ? window.google.accounts.oauth2.revoke
           : window.google.accounts.id.revoke;

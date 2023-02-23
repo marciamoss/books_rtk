@@ -7,6 +7,7 @@ const initialState = {
   showError: false,
   errorMessage: null,
   token: null,
+  validRoute: false,
 };
 const authDataSlice = createSlice({
   name: "authData",
@@ -15,8 +16,11 @@ const authDataSlice = createSlice({
     authDataInfo(state, action) {
       return { ...state, ...action.payload };
     },
+    validRoute(state, action) {
+      return { ...state, ...action.payload };
+    },
   },
 });
 
-export const { authDataInfo } = authDataSlice.actions;
+export const { authDataInfo, validRoute } = authDataSlice.actions;
 export const authDataReducer = authDataSlice.reducer;
