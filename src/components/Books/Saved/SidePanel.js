@@ -1,27 +1,33 @@
 import React, { Fragment } from "react";
-import { useSelector, useDispatch } from 'react-redux';
-import { Dialog, Transition } from '@headlessui/react'
-import { AiOutlineClose } from 'react-icons/ai';
-import { setBookSliceData } from '../../../store';
-import SavedBooksList from './SavedBooksList'
-import { BsChevronDoubleLeft } from 'react-icons/bs';
+import { useSelector, useDispatch } from "react-redux";
+import { Dialog, Transition } from "@headlessui/react";
+import { AiOutlineClose } from "react-icons/ai";
+import { setBookSliceData } from "../../../store";
+import SavedBooksList from "./SavedBooksList";
+import { BsChevronDoubleLeft } from "react-icons/bs";
 
-const SidePanel = ({userId, userInDb}) => {
+const SidePanel = ({ userId, userInDb }) => {
   const dispatch = useDispatch();
-  let hidePanel = 'invisible'; let disablePanel = true;
-  if(userInDb) {
-      hidePanel = 'visible';
-      disablePanel = false;
+  let hidePanel = "invisible";
+  let disablePanel = true;
+  if (userInDb) {
+    hidePanel = "visible";
+    disablePanel = false;
   }
-  const {sliderOpen} = useSelector((state) => {
-      return {
-          sliderOpen: state.book.sliderOpen
-      };
-  });
+  const { sliderOpen } = useSelector((state) => state.book);
   return (
-    <div className={`${hidePanel} flex w-30 mr-5 flex-col space-y-2 border-gray-200 p-2`}>
-      <button disabled={disablePanel} className="max-[640px]:text-sm text-lime-900 font-bold text-lg " onClick={()=>dispatch(setBookSliceData({sliderOpen:true}))}>
-        <div className="flex animate-bounce"><BsChevronDoubleLeft size={40}/><p className="self-center">Open Sesame</p></div>
+    <div
+      className={`${hidePanel} flex w-30 mr-5 flex-col space-y-2 border-gray-200 p-2`}
+    >
+      <button
+        disabled={disablePanel}
+        className="max-[640px]:text-sm text-lime-900 font-bold text-lg "
+        onClick={() => dispatch(setBookSliceData({ sliderOpen: true }))}
+      >
+        <div className="flex animate-bounce">
+          <BsChevronDoubleLeft size={40} />
+          <p className="self-center">Open Sesame</p>
+        </div>
       </button>
       <Transition.Root show={sliderOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setBookSliceData}>
@@ -63,21 +69,28 @@ const SidePanel = ({userId, userInDb}) => {
                         <button
                           type="button"
                           className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                          onClick={() => dispatch(setBookSliceData({sliderOpen:false}))}
+                          onClick={() =>
+                            dispatch(setBookSliceData({ sliderOpen: false }))
+                          }
                         >
                           <span className="sr-only">Close panel</span>
-                          <AiOutlineClose className="h-6 w-6" aria-hidden="true" />
+                          <AiOutlineClose
+                            className="h-6 w-6"
+                            aria-hidden="true"
+                          />
                         </button>
                       </div>
                     </Transition.Child>
                     <div className="flex h-full flex-col overflow-y-scroll bg-yellow-50 py-6 shadow-xl">
                       <div className="px-4 sm:px-6">
-                        <Dialog.Title className="max-[640px]:text-sm text-lg text-center font-bold text-gray-900 underline">Your Books</Dialog.Title>
+                        <Dialog.Title className="max-[640px]:text-sm text-lg text-center font-bold text-gray-900 underline">
+                          Your Books
+                        </Dialog.Title>
                       </div>
                       <div className="relative mt-6 flex-1 px-4 sm:px-6">
                         <div className="absolute inset-0 px-4 sm:px-6">
                           <div className="h-fit" aria-hidden="true">
-                            <SavedBooksList userId={userId}/>
+                            <SavedBooksList userId={userId} />
                           </div>
                         </div>
                       </div>
@@ -90,8 +103,7 @@ const SidePanel = ({userId, userInDb}) => {
         </Dialog>
       </Transition.Root>
     </div>
-
-  )
-}
+  );
+};
 
 export default SidePanel;

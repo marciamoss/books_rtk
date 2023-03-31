@@ -7,12 +7,8 @@ import BookSearch from "./components/Books/Search/BookSearch";
 import { useAddUser, useInitAuth } from "./hooks";
 
 const App = () => {
-  const { authUserId, userAdded } = useSelector((state) => {
-    return {
-      authUserId: state.authData.authUserId,
-      userAdded: state.userData.userAdded,
-    };
-  });
+  const { authUserId } = useSelector((state) => state.authData);
+  const { userAdded } = useSelector((state) => state.userData);
   useInitAuth();
   useFetchUserQuery(authUserId);
   useAddUser();
