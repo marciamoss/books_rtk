@@ -10,7 +10,7 @@ import { BsSearch } from "react-icons/bs";
 
 const BookSearch = ({ authUserId, userAdded }) => {
   const dispatch = useDispatch();
-  const { userInDb } = useCheckUser(authUserId, userAdded);
+  const [userInDb] = useCheckUser(authUserId, userAdded);
   const { bookTitle, author, showList, listFetching } = useSelector(
     (state) => state.book
   );

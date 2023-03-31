@@ -19,12 +19,12 @@ const ListOfBooks = ({ bookTitle, author, authUserId, userAdded }) => {
   const { savedId, saveFailId, searchResults } = useSelector(
     (state) => state.book
   );
-  const { userInDb } = useCheckUser(authUserId, userAdded);
+  const [userInDb] = useCheckUser(authUserId, userAdded);
   const { data, error, isFetching } = useSearchBooksQuery({
     bookTitle,
     author,
   });
-  const { saveBook, previouslySaved } = useBookAction(authUserId);
+  const [saveBook, previouslySaved] = useBookAction(authUserId);
   useSetSearchResults(data);
 
   let content;

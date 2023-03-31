@@ -46,10 +46,7 @@ function useBookAction(authUserId) {
     }
   }, [savedId, saveFailId, deleteFailId, dispatch, resetAlert]);
 
-  return {
-    saveBook,
-    previouslySaved,
-  };
+  return [saveBook, previouslySaved];
 }
 
 export default useBookAction;
