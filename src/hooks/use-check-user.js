@@ -1,30 +1,25 @@
 import { useEffect, useState } from "react";
-import { useFetchUserQuery } from "../store";
+import { useDispatch } from "react-redux";
+import { authDataInfo } from "../store";
 
-function useCheckUser(authUserId, userAdded) {
-  const { refetch } = useFetchUserQuery(authUserId);
-  const [userInDb, setUserInDb] = useState(false);
+function useCheckUser(authUserId) {
+  const dispatch = useDispatch();
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+
+  const localAuthUserId = localStorage.getItem("books_rtk")
+    ? JSON.parse(localStorage.getItem("books_rtk"))
+    : "";
 
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const inDb = await refetch(authUserId).unwrap();
-        if (authUserId && (inDb.length > 0 || userAdded)) {
-          setUserInDb(true);
-        } else {
-          setUserInDb(false);
-        }
-      } catch (error) {
-        setUserInDb(false);
-      }
-    };
-    if (authUserId) {
-      checkUser();
-    } else {
-      setUserInDb(false);
+    if (!localAuthUserId?.authUserId && authUserId) {
+      dispatch(authDataInfo({ showAutoLogout: true }));
     }
-  }, [refetch, authUserId, userAdded]);
-
-  return [userInDb];
+    if (authUserId && localAuthUserId?.authUserId === authUserId) {
+      setUserLoggedIn(true);
+    } else {
+      setUserLoggedIn(false);
+    }
+  }, [authUserId, localAuthUserId, dispatch]);
+  return [userLoggedIn];
 }
 export default useCheckUser;

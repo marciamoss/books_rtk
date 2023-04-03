@@ -10,26 +10,21 @@ import {
   setBookSliceData,
   resetAlertPopup,
 } from "./slices/bookSlice";
-import { userDataReducer } from "./slices/userDataSlice";
 
 import { authApi } from "./apis/authApi";
 import { booksApi } from "./apis/booksApi";
-import { userApi } from "./apis/userApi";
 
 export const store = configureStore({
   reducer: {
     authData: authDataReducer,
     book: bookReducer,
-    userData: userDataReducer,
     [authApi.reducerPath]: authApi.reducer,
     [booksApi.reducerPath]: booksApi.reducer,
-    [userApi.reducerPath]: userApi.reducer,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware()
       .concat(authApi.middleware)
-      .concat(booksApi.middleware)
-      .concat(userApi.middleware);
+      .concat(booksApi.middleware);
   },
 });
 setupListeners(store.dispatch);
@@ -43,4 +38,3 @@ export {
   useSaveUserBookMutation,
   useDeleteUserBookMutation,
 } from "./apis/booksApi";
-export { useFetchUserQuery, useAddUserMutation } from "./apis/userApi";

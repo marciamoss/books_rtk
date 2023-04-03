@@ -12,9 +12,10 @@ import Button from "../../Button";
 import { BiTrash, BiShoppingBag } from "react-icons/bi";
 import { FaInfoCircle } from "react-icons/fa";
 
-const SavedBooksList = ({ userId }) => {
+const SavedBooksList = () => {
   const { deleteFailId } = useSelector((state) => state.book);
-  const { data, error, isFetching } = useFetchUserBooksQuery(userId);
+  const { authUserId } = useSelector((state) => state.authData);
+  const { data, error, isFetching } = useFetchUserBooksQuery(authUserId);
   const [deleteUserBook] = useDeleteUserBookMutation();
 
   const [deleteConfirm, setDeleteConfirm] = useState(false);

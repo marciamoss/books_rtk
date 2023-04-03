@@ -7,13 +7,13 @@ import { authDataInfo } from "../../store";
 import { useCheckRoute } from "../../hooks";
 import PageNotFound from "../PageNotFound";
 
-const Header = () => {
+const Header = ({ userLoggedIn }) => {
   useCheckRoute();
   const location = useLocation();
   const [logIn] = useLogInMutation();
   const [logOut] = useLogOutMutation();
 
-  const { signedIn, userName, showError, errorMessage } = useSelector(
+  const { userName, showError, errorMessage } = useSelector(
     (state) => state.authData
   );
 
@@ -41,7 +41,7 @@ const Header = () => {
           )}
         </>
         <>
-          {signedIn ? (
+          {userLoggedIn ? (
             <div>
               <h1 className="max-[640px]:text-sm text-center text-lg text-zinc-50 font-bold">
                 Hello {userName}
@@ -53,12 +53,14 @@ const Header = () => {
         </>
         <button
           onClick={() =>
-            !signedIn ? logIn({ authDataInfo }) : logOut({ authDataInfo })
+            !userLoggedIn ? logIn({ authDataInfo }) : logOut({ authDataInfo })
           }
           className="max-[640px]:text-sm text-lg text-zinc-50 font-bold"
         >
           <div className="flex items-center">
-            <span className="mr-1">{!signedIn ? "Sign In" : "Sign Out"}</span>
+            <span className="mr-1">
+              {!userLoggedIn ? "Sign In" : "Sign Out"}
+            </span>
             <FcGoogle />
           </div>
         </button>

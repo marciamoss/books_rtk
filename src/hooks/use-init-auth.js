@@ -6,7 +6,9 @@ const keys = require("../keys.js");
 function useInitAuth() {
   const dispatch = useDispatch();
   const [logIn] = useLogInMutation();
-  const { token, authUserId, userName } = localStorage.getItem("books_rtk")
+  const { token, authUserId, userName, email } = localStorage.getItem(
+    "books_rtk"
+  )
     ? JSON.parse(localStorage.getItem("books_rtk"))
     : "";
 
@@ -23,6 +25,7 @@ function useInitAuth() {
           signedIn: true,
           token,
           authUserId,
+          email,
           userName,
           showError: false,
           errorMessage: null,
@@ -31,7 +34,7 @@ function useInitAuth() {
     } else {
       logIn({ authDataInfo, initialRender: true });
     }
-  }, [dispatch, logIn, token, authUserId, userName]);
+  }, [dispatch, logIn, token, authUserId, email, userName]);
 }
 
 export default useInitAuth;

@@ -3,11 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   signedIn: false,
   authUserId: null,
+  email: null,
   userName: null,
   showError: false,
   errorMessage: null,
   token: null,
   validRoute: false,
+  showAutoLogout: false,
+  showAutoLogin: false,
 };
 const authDataSlice = createSlice({
   name: "authData",

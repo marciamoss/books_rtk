@@ -4,6 +4,7 @@ const keys = require("../../keys.js");
 let initial = {
   signedIn: false,
   authUserId: null,
+  email: null,
   userName: null,
   showError: false,
   errorMessage: null,
@@ -18,25 +19,39 @@ const authApi = createApi({
     gInit: builder.mutation({
       queryFn: async ({ authDataInfo }, { dispatch }) => {
         const handleGoogleSignIn = (response) => {
-          const responsePayload = jwt_decode(response.credential);
-          localStorage.setItem(
-            "books_rtk",
-            JSON.stringify({
-              token: null,
-              authUserId: responsePayload.sub,
-              userName: responsePayload.name,
-            })
-          );
-          dispatch(
-            authDataInfo({
-              ...initial,
-              ...{
-                signedIn: true,
+          const localAuthUserId = localStorage.getItem("books_rtk")
+            ? JSON.parse(localStorage.getItem("books_rtk"))
+            : "";
+          if (localAuthUserId?.authUserId) {
+            dispatch(
+              authApi.endpoints.autoLogin.initiate({
+                authDataInfo,
+                localAuthUserId,
+              })
+            );
+          } else {
+            const responsePayload = jwt_decode(response.credential);
+            localStorage.setItem(
+              "books_rtk",
+              JSON.stringify({
+                token: null,
                 authUserId: responsePayload.sub,
                 userName: responsePayload.name,
-              },
-            })
-          );
+                email: responsePayload.email,
+              })
+            );
+            dispatch(
+              authDataInfo({
+                ...initial,
+                ...{
+                  signedIn: true,
+                  authUserId: responsePayload.sub,
+                  userName: responsePayload.name,
+                  email: responsePayload.email,
+                },
+              })
+            );
+          }
         };
         await window.google.accounts.id.initialize({
           client_id: keys.gAuth.clientId,
@@ -51,7 +66,17 @@ const authApi = createApi({
         { authDataInfo, initialRender = false },
         { dispatch, getState }
       ) => {
-        if (window.google && getState().authData.validRoute) {
+        const localAuthUserId = localStorage.getItem("books_rtk")
+          ? JSON.parse(localStorage.getItem("books_rtk"))
+          : "";
+        if (localAuthUserId?.authUserId) {
+          dispatch(
+            authApi.endpoints.autoLogin.initiate({
+              authDataInfo,
+              localAuthUserId,
+            })
+          );
+        } else if (window.google && getState().authData.validRoute) {
           await dispatch(authApi.endpoints.gInit.initiate({ authDataInfo }));
           await window.google.accounts.id.prompt(async (response) => {
             await dispatch(
@@ -62,8 +87,8 @@ const authApi = createApi({
               })
             );
           });
-          return {};
         }
+        return {};
       },
     }),
     oneStepLoginFail: builder.mutation({
@@ -132,7 +157,7 @@ const authApi = createApi({
                 authDataInfo,
               })
             ),
-          error_callback: (error) =>
+          error_callback: (error) => {
             dispatch(
               authDataInfo({
                 ...initial,
@@ -141,7 +166,8 @@ const authApi = createApi({
                   errorMessage: error.message,
                 },
               })
-            ),
+            );
+          },
         });
         client.requestAccessToken();
         return {};
@@ -149,46 +175,60 @@ const authApi = createApi({
     }),
     authByToken: builder.mutation({
       queryFn: async ({ access_token, authDataInfo }, { dispatch }) => {
-        try {
-          const profile = await fetch(
-            "https://www.googleapis.com/oauth2/v1/userinfo",
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${access_token}`,
-              },
-            }
-          );
-          const profileData = await profile.json();
-          localStorage.setItem(
-            "books_rtk",
-            JSON.stringify({
-              token: access_token,
-              authUserId: profileData.id,
-              userName: profileData.name,
+        const localAuthUserId = localStorage.getItem("books_rtk")
+          ? JSON.parse(localStorage.getItem("books_rtk"))
+          : "";
+        if (localAuthUserId?.authUserId) {
+          dispatch(
+            authApi.endpoints.autoLogin.initiate({
+              authDataInfo,
+              localAuthUserId,
             })
           );
-          dispatch(
-            authDataInfo({
-              ...initial,
-              ...{
-                signedIn: true,
+        } else {
+          try {
+            const profile = await fetch(
+              "https://www.googleapis.com/oauth2/v1/userinfo",
+              {
+                method: "GET",
+                headers: {
+                  Authorization: `Bearer ${access_token}`,
+                },
+              }
+            );
+            const profileData = await profile.json();
+            localStorage.setItem(
+              "books_rtk",
+              JSON.stringify({
                 token: access_token,
                 authUserId: profileData.id,
+                email: profileData.email,
                 userName: profileData.name,
-              },
-            })
-          );
-        } catch (error) {
-          dispatch(
-            authDataInfo({
-              ...initial,
-              ...{
-                showError: true,
-                errorMessage: error.message,
-              },
-            })
-          );
+              })
+            );
+            dispatch(
+              authDataInfo({
+                ...initial,
+                ...{
+                  signedIn: true,
+                  token: access_token,
+                  authUserId: profileData.id,
+                  email: profileData.email,
+                  userName: profileData.name,
+                },
+              })
+            );
+          } catch (error) {
+            dispatch(
+              authDataInfo({
+                ...initial,
+                ...{
+                  showError: true,
+                  errorMessage: error.message,
+                },
+              })
+            );
+          }
         }
         return {};
       },
@@ -202,9 +242,24 @@ const authApi = createApi({
         const revokeId = getState().authData.token
           ? getState().authData.token
           : getState().authData.authUserId;
-        revokeFn(revokeId, () => {
-          dispatch(authDataInfo(initial));
-        });
+        revokeFn(revokeId, () => dispatch(authDataInfo(initial)));
+        return {};
+      },
+    }),
+    autoLogin: builder.mutation({
+      queryFn: async ({ authDataInfo, localAuthUserId }, { dispatch }) => {
+        dispatch(
+          authDataInfo({
+            signedIn: true,
+            token: localAuthUserId?.token,
+            authUserId: localAuthUserId?.authUserId,
+            email: localAuthUserId?.email,
+            userName: localAuthUserId?.userName,
+            showError: false,
+            errorMessage: null,
+            showAutoLogin: true,
+          })
+        );
         return {};
       },
     }),

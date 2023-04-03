@@ -1,11 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useSearchBooksQuery } from "../../../store";
-import {
-  useCheckUser,
-  useBookAction,
-  useSetSearchResults,
-} from "../../../hooks";
+import { useBookAction, useSetSearchResults } from "../../../hooks";
 import createBookObject from "../../../utils/createBookObject";
 import Button from "../../Button";
 import ExpandablePanel from "../../ExpandablePanel";
@@ -15,16 +11,16 @@ import { AiFillShopping } from "react-icons/ai";
 import { FaInfoCircle } from "react-icons/fa";
 import Skeleton from "../../Skeleton";
 
-const ListOfBooks = ({ bookTitle, author, authUserId, userAdded }) => {
-  const { savedId, saveFailId, searchResults } = useSelector(
+const ListOfBooks = ({ authUserId, userLoggedIn }) => {
+  const { bookTitle, author, savedId, saveFailId, searchResults } = useSelector(
     (state) => state.book
   );
-  const [userInDb] = useCheckUser(authUserId, userAdded);
   const { data, error, isFetching } = useSearchBooksQuery({
     bookTitle,
     author,
   });
-  const [saveBook, previouslySaved] = useBookAction(authUserId);
+  const [saveBook, previouslySaved, saveUserBookResult] =
+    useBookAction(authUserId);
   useSetSearchResults(data);
 
   let content;
@@ -90,9 +86,14 @@ const ListOfBooks = ({ bookTitle, author, authUserId, userAdded }) => {
                     </a>
                     <Button
                       onClick={() => saveBook(bookObject)}
-                      disabled={`${userInDb ? false : true}`}
+                      disabled={!userLoggedIn}
+                      loading={
+                        bookObject.id ===
+                          saveUserBookResult?.originalArgs?.id &&
+                        saveUserBookResult.isLoading
+                      }
                       className={`${
-                        userInDb ? "visible" : "invisible"
+                        userLoggedIn ? "visible" : "invisible"
                       } border-0 mb-1 mt-1 px-0 pt-0 pb-0 h-fit`}
                     >
                       <RiBookMarkFill size={25} />
