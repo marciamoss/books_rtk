@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Dialog, Transition } from "@headlessui/react";
 import { AiOutlineClose } from "react-icons/ai";
@@ -7,13 +7,19 @@ import SavedBooksList from "./SavedBooksList";
 
 const SidePanel = ({ hidePanel, userLoggedIn }) => {
   const dispatch = useDispatch();
+  let closeButtonRef = useRef(null);
   const { sliderOpen } = useSelector((state) => state.book);
   return (
     <div
       className={`${hidePanel} flex w-30 mr-5 flex-col space-y-2 border-gray-200 p-2`}
     >
       <Transition.Root show={sliderOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={setBookSliceData}>
+        <Dialog
+          initialFocus={closeButtonRef}
+          as="div"
+          className="relative z-10"
+          onClose={setBookSliceData}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-in-out duration-500"
@@ -51,6 +57,7 @@ const SidePanel = ({ hidePanel, userLoggedIn }) => {
                       <div className="absolute top-0 left-0 -ml-8 flex pt-4 pr-2 sm:-ml-10 sm:pr-4">
                         <button
                           type="button"
+                          ref={closeButtonRef}
                           className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                           onClick={() =>
                             dispatch(setBookSliceData({ sliderOpen: false }))

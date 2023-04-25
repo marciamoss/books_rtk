@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   useFetchUserBooksQuery,
   useDeleteUserBookMutation,
+  setBookSliceData,
+  authDataInfo,
 } from "../../../store";
 import Skeleton from "../../Skeleton";
 import { GiBookCover } from "react-icons/gi";
@@ -13,6 +15,7 @@ import { BiTrash, BiShoppingBag } from "react-icons/bi";
 import { FaInfoCircle } from "react-icons/fa";
 
 const SavedBooksList = () => {
+  const dispatch = useDispatch();
   const { deleteFailId } = useSelector((state) => state.book);
   const { authUserId } = useSelector((state) => state.authData);
   const { data, error, isFetching } = useFetchUserBooksQuery(authUserId);
@@ -22,8 +25,16 @@ const SavedBooksList = () => {
   const [current, setCurrent] = useState("");
 
   const deletBook = (book) => {
-    setCurrent(book);
-    setDeleteConfirm(true);
+    let localAuthId = localStorage.getItem("books_rtk")
+      ? JSON.parse(localStorage.getItem("books_rtk")).authUserId
+      : "";
+    if (localAuthId === authUserId) {
+      setCurrent(book);
+      setDeleteConfirm(true);
+    } else {
+      dispatch(setBookSliceData({ sliderOpen: false }));
+      dispatch(authDataInfo({ showAutoLogout: true }));
+    }
   };
 
   let content;

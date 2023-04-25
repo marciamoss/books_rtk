@@ -1,12 +1,18 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { MdClose } from "react-icons/md";
 
 const MessageModal = ({ showModal, dispatchType, message, modalColor }) => {
+  let closeButtonRef = useRef(null);
   return (
     <>
       <Transition appear show={showModal} as={Fragment}>
-        <Dialog as="div" className="relative z-20" onClose={dispatchType}>
+        <Dialog
+          as="div"
+          initialFocus={closeButtonRef}
+          className="relative z-20"
+          onClose={dispatchType}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -35,6 +41,7 @@ const MessageModal = ({ showModal, dispatchType, message, modalColor }) => {
                 >
                   <button
                     type="button"
+                    ref={closeButtonRef}
                     className="absolute right-0 top-0 p-2 outline-none"
                     onClick={dispatchType}
                   >
